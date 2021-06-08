@@ -1,0 +1,280 @@
+<!doctype html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>主页-气象数据分析与推荐系</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/xadmin.css">
+    <!-- <link rel="stylesheet" href="./css/theme5.css"> -->
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script>
+        // 是否开启刷新记忆tab功能
+        // var is_remember = false;
+    </script>
+</head>
+<body class="index">
+<!-- 顶部开始 -->
+<div class="container">
+    <div class="logo">
+        <a href="index.html">GEIAS</a></div>
+    <div class="left_open">
+        <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
+    </div>
+    <ul class="layui-nav left fast-add" lay-filter="">
+
+    </ul>
+    <ul class="layui-nav right" lay-filter="">
+        <li class="layui-nav-item">
+            <a href="javascript:;" id="user" style="width: 70px;text-align: center"></a>
+            <dl class="layui-nav-child">
+                <!-- 二级菜单 -->
+                <dd>
+                    <a href="#" onclick="xadmin.open('修改个人信息','/page/personedit',600,400)">更改个人信息</a></dd>
+                <dd>
+                    <a href="#" onclick="xadmin.open('添加人脸识别样张','/page/fase',850,600)">添加人脸识别样张</a></dd>
+                <dd>
+                    <a onclick="location.href='/page/login'">切换帐号</a></dd>
+                <dd>
+                    <a href="#" onclick="closePage()">退出</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item to-index">
+
+    </ul>
+</div>
+<!-- 顶部结束 -->
+<!-- 中部开始 -->
+<!-- 左侧菜单开始 -->
+<div class="left-nav">
+    <div id="side-nav">
+        <ul id="nav">
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="实时天气查询">&#xe6b8;</i>
+                    <cite>实时天气情况</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('实时天气预报','/page/nowweather')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>实时天气预报</cite></a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="实时天气查询">&#xe6b8;</i>
+                            <cite>未来天气预报</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('预测未来24小时','/page/hour24')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>预测未来24小时</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('预测未来15天','/page/day15')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>预测未来15天</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('预测未来40天','/page/day40')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>预测未来40天</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+
+<!--                    <li>-->
+<!--                        <a onclick="xadmin.add_tab('天气情况排名','/page/weathertop')">-->
+<!--                            <i class="iconfont">&#xe6a7;</i>-->
+<!--                            <cite>天气情况排名</cite></a>-->
+<!--                    </li>-->
+
+                    <li>
+                        <a onclick="xadmin.add_tab('天气指数查询','/page/weatherindex')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>天气指数查询</cite></a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="实时天气查询">&#xe6b8;</i>
+                    <cite>天气排名</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+
+                    <li>
+                        <a onclick="xadmin.add_tab('天气情况排名','/page/weathertop')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>空气温度TOP10</cite></a>
+                    </li>
+                </ul>
+
+                <ul class="sub-menu">
+
+                    <li>
+                        <a onclick="xadmin.add_tab('空气质量TOP10','/page/weatheraqitop')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>空气质量TOP10</cite></a>
+                    </li>
+                </ul>
+
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('降水量TOP10','/page/weatherraintop')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>降水量TOP10</cite></a>
+                    </li>
+                </ul>
+
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('风力TOP10','/page/weatherwindpowertop')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>风力TOP10</cite></a>
+                    </li>
+                </ul>
+
+
+
+
+            </li>
+
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="实时天气查询">&#xe6b8;</i>
+                    <cite>指数查询</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+
+                    <li>
+                        <a onclick="xadmin.add_tab('天气指数查询','/page/weatherindex')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>天气指数查询</cite></a>
+                    </li>
+
+                </ul>
+            </li>
+
+
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="旅游推荐">&#xe6ce;</i>
+                    <cite>旅游推荐</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('城市景点推荐','/page/jingdian')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>城市景点推荐</cite></a>
+                    </li>
+
+                    <li>
+                        <a onclick="xadmin.add_tab('旅游路线推荐','/page/route')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>旅游路线推荐</cite></a>
+                    </li>
+
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="历史数据情况">&#xe726;</i>
+                    <cite>历史数据情况</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('平均数据','/page/weatheravg')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>平均数据</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('气象趋势','/page/weathertrend')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>气象趋势</cite></a>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- <div class="x-slide_left"></div> -->
+<!-- 左侧菜单结束 -->
+<!-- 右侧主体开始 -->
+<div class="page-content">
+    <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+        <ul class="layui-tab-title">
+            <li class="home">
+                <i class="layui-icon">&#xe68e;</i>天气预报
+            </li>
+        </ul>
+        <div class="layui-unselect layui-form-select layui-form-selected" id="tab_right">
+            <dl>
+                <dd data-type="this">关闭当前</dd>
+                <dd data-type="other">关闭其它</dd>
+                <dd data-type="all">关闭全部</dd>
+            </dl>
+        </div>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <img src="/images/tianqi.jpg">
+            </div>
+        </div>
+        <div id="tab_show"></div>
+    </div>
+</div>
+<div class="page-content-bg"></div>
+<style id="theme_style"></style>
+<!-- 右侧主体结束 -->
+<!-- 中部结束 -->
+</body>
+<script>
+    var is_remember = false;
+    getUser();
+    function getUser() {
+        var url ='/personinfo/getuser';
+        $.ajax({
+            url: url,
+            type: "get",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                if (data.success) {
+                    $("#user").html(data.person.personName);
+                } else {
+                    layer.alert(data.errMsg, {
+                        icon: 6
+                    });
+                }
+            }
+        });
+    }
+    function closePage() {
+        var userAgent = navigator.userAgent;
+        if (userAgent.indexOf("Firefox") != -1
+            || userAgent.indexOf("Chrome") != -1) {
+            window.location.href = "about:blank";
+        } else {
+            window.opener = null;
+            window.open("", "_self");
+            window.close();
+        }
+    }
+</script>
+</html>

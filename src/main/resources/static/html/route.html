@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        大数据的气象数据分析与推荐系(GEIAS)
+    </title>
+    <meta content="webkit" name="renderer">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"
+          name="viewport" />
+    <link href="/css/font.css" rel="stylesheet">
+    <link href="/css/xadmin.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/basic.css" rel="stylesheet">
+    <script src="/js/jquery.min.js" type="text/javascript">
+    </script>
+    <script charset="utf-8" src="/lib/layui/layui.js">
+    </script>
+    <script src="/js/xadmin.js" type="text/javascript">
+    </script>
+</head>
+<body>
+<div class="x-nav">
+    <a class="layui-btn layui-btn-small" onclick="location.reload()" style="line-height:1.6em;margin-top:3px;float:right"
+       title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px">
+        </i>
+    </a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label for="keyword" class="layui-form-label">
+							<span class="x-red">
+								*
+							</span>
+                    输入景点名称
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="keyword" name="keyword" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input">
+                </div>
+                <button class="layui-btn" lay-filter="add" lay-submit="">
+                    查询
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="tour">
+        <table class="layui-table layui-form" style="width: 1100px">
+            <thead>
+            <tr>
+                <th>推荐路线一</th>
+                <th>景点地点</th>
+                <th>景点名称</th>
+            </thead>
+            <tbody id="list" style="width: 80%">
+            </tbody>
+        </table>
+        <table class="layui-table layui-form" style="width: 1100px">
+            <thead>
+            <tr>
+                <th>推荐路线二</th>
+                <th>景点地点</th>
+                <th>景点名称</th>
+            </thead>
+            <tbody id="listNew" style="width: 80%">
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+</body>
+<script>
+		layui.use(['form', 'layer'],
+		function() {
+			$ = layui.jquery;
+			var form = layui.form,
+			layer = layui.layer;
+			form.on('submit(add)',
+			function(data) {
+				console.log(data);
+				//alert(data);
+				var keyword = data.field.keyword;
+				var url = '/jingdian/route?keyword=' + keyword;
+				$.ajax({
+					url: url,
+					type: "get",
+					dataType: "json",
+					async: false,
+					success: function(data) {
+						var html = '';
+						var htmlNew = '';
+						data.routeList.map(function(item, index) {
+							html +='<tr>\n' +
+                                        '<td>' + item.index + '   ↓</td>\n' +
+                                        '<td>' + item.fullName + '</td>\n' +
+                                        '<td>' + item.name + '</td>\n' +
+                                    '</tr>'
+                            htmlNew +='<tr>\n' +
+                                        '<td>' + item.indexNew + '</td>\n' +
+                                        '<td>' + item.fullName + '</td>\n' +
+                                        '<td>' + item.name + '</td>\n' +
+                                    '</tr>'
+
+						});
+						$("#list").html(html);
+						$("#listNew").html(htmlNew);
+					}
+				});
+
+<!--				$.ajax({-->
+<!--					url: url,-->
+<!--					type: "get",-->
+<!--					dataType: "json",-->
+<!--					async: false,-->
+<!--					success: function(data) {-->
+<!--						var html = '';-->
+<!--						data.routeList.map(function(item, index) {-->
+<!--							html +='<tr>\n' +-->
+<!--                                        '<td>' + item.indexNew + '</td>\n' +-->
+<!--                                        '<td>' + item.fullName + '</td>\n' +-->
+<!--                                        '<td>' + item.name + '</td>\n' +-->
+<!--                                    '</tr>'-->
+
+<!--						});-->
+<!--						$("#listNew").html(html);-->
+<!--					}-->
+<!--				});-->
+				return false;
+			});
+		});
+	</script>
+
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>气象数据分析与推荐系统(GEIAS)</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/css/xadmin.css">
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/xadmin.js"></script>
+</head>
+
+<body>
+<div class="x-nav">
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+    </a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <div class="layui-form-item">
+                        <form class="layui-form layui-col-space5">
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <select id="provincial" lay-filter="provincial" name="contrller">
+
+                                </select>
+                            </div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <select id="specialty" lay-filter="specialty" name="contrller">
+
+                                </select>
+                            </div>
+                        </form>
+                        <div class="layui-input-inline layui-show-xs-block"
+                             style="width:50px;height: 30px;margin-top: 2px">
+                            <button class="layui-btn" id="infoto">
+                                <i class="layui-icon">&#xe615;</i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-card-body ">
+                    <table class="layui-table layui-form" style="width: 1100px">
+                        <thead>
+                        <tr>
+                            <th>城市</th>
+                            <th>降水量（mm）</th>
+                            <th>空气质量</th>
+                            <th>空气湿度</th>
+                            <th>气温</th>
+                            <th>风力</th>
+                        </tr>
+                        </thead>
+                        <tbody id="list" style="width: 80%">
+
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body ">
+                    <div class="page">
+                        <div id="page">
+                            <div id="pagecount"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function classgrade_del(classId, specialtyId) {
+        var url = '/organizationcontroller/delclassgrade?classId=' + classId + '&specialtyId=' + specialtyId;
+        layer.alert("删除班级将会删除所有:就业信息", {
+                icon: 6
+            },
+            function () {
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        if (data.success) {
+                            layer.alert('删除成功', {
+                                icon: 6
+                            });
+                            location.reload();
+                        } else {
+                            layer.alert(data.errMsg, {
+                                icon: 6
+                            });
+                        }
+                    }
+                });
+            });
+    }
+
+    $(function () {
+        getInitData();
+
+        function getInitData() {
+            var url = '/init/getinit';
+            $.ajax({
+                url: url,
+                type: "get",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        initData(data);
+
+                    } else {
+                        layer.alert(data.errMsg, {
+                            icon: 6
+                        });
+                    }
+                }
+            });
+        }
+
+        function initData(data) {
+            var html = '';
+            data.provincial.map(function (item, index) {
+                html += '<option value="' + item.id + '">' + item.name + '</option>';
+            });
+            $("#provincial").html(html);
+
+        }
+
+        function getlist(id) {
+            var url = '/init/getinit?cityId=' + id;
+            $.ajax({
+                url: url,
+                type: "get",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        setlist(data);
+                    } else {
+                        layer.alert(data.errMsg, {
+                            icon: 6
+                        });
+                    }
+                }
+            });
+        }
+
+        function setlist(data) {
+            var html = '';
+            data.List.map(function (item, index) {
+                html += '<tr>\n' +
+                    '<td>' + item.areaName + '</td>\n' +
+                    '<td>' + item.rain + '</td>\n' +
+                    '<td>' + item.aqi + '</td>\n' +
+                    '<td>' + item.sd + '</td>\n' +
+                    '<td>' + item.temperature + '</td>\n' +
+                    '<td>' + item.windpower + '</td>\n' +
+                    '</tr>'
+            });
+            $("#list").html(html);
+        }
+
+        $("#infoto").click(function () {
+            var specialtyId = $($(".layui-this")[1]).attr("lay-value");
+            getlist(specialtyId);
+        });
+//:selected
+        layui.use(['laydate', 'form'],
+            function () {
+                var laydate = layui.laydate;
+                var form = layui.form;
+                form.on('select(provincial)', function (data) {
+                    console.log(data);
+                    getspecualty(data.value, form);
+                });
+                //执行一个laydate实例
+                laydate.render({
+                    elem: '#start' //指定元素
+                });
+
+                //执行一个laydate实例
+                laydate.render({
+                    elem: '#end' //指定元素
+                });
+            });
+    });
+
+    function getspecualty(id, form) {
+        var url = '/init/getinit?provincialId=' + id;
+        $.ajax({
+            url: url,
+            type: "get",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                if (data.success) {
+                    var html = '';
+                    data.city.map(function (item, index) {
+                        html += '<option value="' + item.id + '">' + item.name + '</option>';
+                    });
+                    $("#specialty").html(html);
+                    form.render('select');
+                } else {
+                    layer.alert(data.errMsg, {
+                        icon: 6
+                    });
+                }
+            }
+        });
+    }
+</script>
+
+</html>
